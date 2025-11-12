@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Todo {
   id: string;
@@ -110,11 +110,10 @@ export default function Home() {
                     className="h-5 w-5 cursor-pointer rounded border-zinc-300 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-zinc-600"
                   />
                   <span
-                    className={`flex-1 ${
-                      todo.completed
+                    className={`flex-1 ${todo.completed
                         ? 'text-zinc-500 line-through dark:text-zinc-500'
                         : 'text-black dark:text-zinc-50'
-                    }`}
+                      }`}
                   >
                     {todo.text}
                   </span>

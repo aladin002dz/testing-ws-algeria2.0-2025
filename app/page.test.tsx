@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, waitFor, createMockTodo, createMockTodos } from '../test/utils/testHelpers';
 import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { createMockTodo, createMockTodos, render, screen, waitFor } from '../test/utils/testHelpers';
 import Home from './page';
 
 describe('Home Component', () => {
@@ -12,7 +12,7 @@ describe('Home Component', () => {
   describe('Rendering tests', () => {
     it('should render initial empty state', () => {
       render(<Home />);
-      
+
       expect(screen.getByText('My To-Do List')).toBeInTheDocument();
       expect(screen.getByPlaceholderText('Add a new task...')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /add/i })).toBeInTheDocument();
@@ -81,7 +81,6 @@ describe('Home Component', () => {
       const user = userEvent.setup();
       render(<Home />);
 
-      const input = screen.getByPlaceholderText('Add a new task...');
       const addButton = screen.getByRole('button', { name: /add/i });
 
       await user.click(addButton);
@@ -163,7 +162,7 @@ describe('Home Component', () => {
       render(<Home />);
 
       const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-      
+
       await user.click(deleteButtons[0]);
       await user.click(deleteButtons[1]);
 
@@ -180,7 +179,7 @@ describe('Home Component', () => {
       render(<Home />);
 
       const checkboxes = screen.getAllByRole('checkbox');
-      
+
       await user.click(checkboxes[0]);
       await user.click(checkboxes[1]);
 
@@ -283,12 +282,12 @@ describe('Home Component', () => {
       const user = userEvent.setup();
       render(<Home />);
 
-      const input = screen.getByPlaceholderText('Add a new task...');
       const addButton = screen.getByRole('button', { name: /add/i });
 
-      await user.click(input);
+      // Click add button without typing anything (input is already empty)
       await user.click(addButton);
 
+      // Verify empty state is still shown
       expect(screen.getByText('No tasks yet. Add one above to get started!')).toBeInTheDocument();
     });
 
@@ -313,7 +312,7 @@ describe('Home Component', () => {
       render(<Home />);
 
       const checkboxes = screen.getAllByRole('checkbox');
-      
+
       for (const checkbox of checkboxes) {
         await user.click(checkbox);
       }
@@ -335,7 +334,7 @@ describe('Home Component', () => {
       render(<Home />);
 
       const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-      
+
       for (const button of deleteButtons) {
         await user.click(button);
       }
@@ -349,24 +348,34 @@ describe('Home Component', () => {
 
     it('should update stats correctly when todos are completed', async () => {
       const user = userEvent.setup();
+      // Create todos with unique IDs to avoid conflicts
       const mockTodos = [
-        createMockTodo({ text: 'Todo 1', completed: false }),
-        createMockTodo({ text: 'Todo 2', completed: false }),
-        createMockTodo({ text: 'Todo 3', completed: false }),
+        { id: '1', text: 'Todo 1', completed: false },
+        { id: '2', text: 'Todo 2', completed: false },
+        { id: '3', text: 'Todo 3', completed: false },
       ];
       localStorage.setItem('todos', JSON.stringify(mockTodos));
 
       render(<Home />);
 
-      expect(screen.getByText('0 of 3 tasks completed')).toBeInTheDocument();
+      // Wait for component to load from localStorage
+      await waitFor(() => {
+        expect(screen.getByText('Todo 1')).toBeInTheDocument();
+        expect(screen.getByText('0 of 3 tasks completed')).toBeInTheDocument();
+      });
 
+      // Get all checkboxes (only the todo checkboxes, not input)
       const checkboxes = screen.getAllByRole('checkbox');
+      expect(checkboxes).toHaveLength(3);
+
+      // Click first checkbox
       await user.click(checkboxes[0]);
 
       await waitFor(() => {
         expect(screen.getByText('1 of 3 tasks completed')).toBeInTheDocument();
       });
 
+      // Click second checkbox
       await user.click(checkboxes[1]);
 
       await waitFor(() => {
