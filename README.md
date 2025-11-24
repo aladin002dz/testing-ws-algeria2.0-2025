@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vitest + React Testing Cheatsheet
 
-## Getting Started
+This project uses **Vitest** for unit and component testing, along with **React Testing Library** for rendering and interacting with components.
 
-First, run the development server:
+## 🚀 Testing Commands
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+| Command | Description |
+|---------|-------------|
+| `npm run test` | Run tests in watch mode (default) |
+| `npm run test:run` | Run tests once (CI mode) |
+| `npm run test:coverage` | Run tests with coverage report (silent output) |
+| `npm run test:ui` | Open Vitest UI for interactive debugging |
+
+## 🧪 Core Concepts
+
+### Rendering
+Render your component into a virtual DOM for testing.
+```tsx
+import { render, screen } from '@testing-library/react';
+import Home from './page';
+
+render(<Home />);
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Querying Elements
+Find elements rendered in the DOM.
+- **`getBy...`**: Returns the element or throws an error if not found (use for assertions).
+- **`queryBy...`**: Returns the element or `null` (use for checking non-existence).
+- **`findBy...`**: Returns a Promise that resolves when the element is found (use for async).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Common Queries:**
+- `screen.getByText('Hello World')`
+- `screen.getByRole('button', { name: /submit/i })`
+- `screen.getByPlaceholderText('Enter your name')`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### User Interactions
+Simulate user events like clicking and typing. Always use `userEvent.setup()`.
+```tsx
+import userEvent from '@testing-library/user-event';
 
-## Learn More
+const user = userEvent.setup();
+await user.type(screen.getByRole('textbox'), 'Hello');
+await user.click(screen.getByRole('button'));
+```
 
-To learn more about Next.js, take a look at the following resources:
+## ✅ Common Assertions
+Using `jest-dom` matchers for readable assertions.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```tsx
+expect(element).toBeInTheDocument();
+expect(element).toHaveValue('Hello');
+expect(element).toBeChecked();
+expect(element).toHaveClass('active');
+expect(element).toBeDisabled();
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ⏳ Async Testing
+Wait for UI updates (e.g., after a state change or API call).
 
-## Deploy on Vercel
+```tsx
+import { waitFor } from '@testing-library/react';
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+await waitFor(() => {
+  expect(screen.getByText('Loaded')).toBeInTheDocument();
+});
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎭 Mocking
+Example: Mocking `localStorage`.
+
+```tsx
+const mockTodos = [{ id: 1, text: 'Buy milk', completed: false }];
+
+// Setup before render
+localStorage.setItem('todos', JSON.stringify(mockTodos));
+
+// Verify after interaction
+expect(JSON.parse(localStorage.getItem('todos'))).toHaveLength(1);
+```
+
+## 🐞 Debugging
+
+- **`screen.debug()`**: Prints the current DOM state to the console.
+- **Vitest UI**: Run `npm run test:ui` to see component state and logs visually.
