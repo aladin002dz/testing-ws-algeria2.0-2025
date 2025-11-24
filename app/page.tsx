@@ -16,6 +16,7 @@ export default function Home() {
   useEffect(() => {
     const savedTodos = localStorage.getItem('todos');
     if (savedTodos) {
+      console.log('📢 Current todos: ', JSON.parse(savedTodos));
       setTodos(JSON.parse(savedTodos));
     }
   }, []);
@@ -23,6 +24,7 @@ export default function Home() {
   // Save todos to localStorage whenever todos change
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
+    console.log('📢 Current todos: ', JSON.parse(savedTodos));
   }, [todos]);
 
   const addTodo = () => {
@@ -32,6 +34,7 @@ export default function Home() {
         text: inputValue.trim(),
         completed: false,
       };
+      console.log('📢 New todo: ', newTodo);
       setTodos([...todos, newTodo]);
       setInputValue('');
     }
@@ -47,6 +50,7 @@ export default function Home() {
 
   const deleteTodo = (id: string) => {
     setTodos(todos.filter((todo) => todo.id !== id));
+    console.log('📢 todo deleted: ', id);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -111,8 +115,8 @@ export default function Home() {
                   />
                   <span
                     className={`flex-1 ${todo.completed
-                        ? 'text-zinc-500 line-through dark:text-zinc-500'
-                        : 'text-black dark:text-zinc-50'
+                      ? 'text-zinc-500 line-through dark:text-zinc-500'
+                      : 'text-black dark:text-zinc-50'
                       }`}
                   >
                     {todo.text}

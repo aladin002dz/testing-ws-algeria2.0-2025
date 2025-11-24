@@ -11,6 +11,8 @@ describe('Home Component', () => {
 
   describe('Rendering tests', () => {
     it('should render initial empty state', () => {
+      console.log('📢 LOUD LOG: This should be hidden by --silent');
+      console.error('❌ ERROR LOG: This should also be hidden by --silent');
       render(<Home />);
 
       expect(screen.getByText('My To-Do List')).toBeInTheDocument();
