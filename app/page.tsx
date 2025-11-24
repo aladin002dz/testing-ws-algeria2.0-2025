@@ -24,7 +24,7 @@ export default function Home() {
   // Save todos to localStorage whenever todos change
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
-    console.log('📢 Current todos: ', JSON.parse(savedTodos));
+    console.log('📢 Current todos: ', JSON.stringify(todos));
   }, [todos]);
 
   const addTodo = () => {
