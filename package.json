@@ -3,7 +3,7 @@
 		"test": "vitest",
 		"test:run": "vitest run",
 		"test:coverage": "vitest run --coverage",
-		"test:ui": "vitest run --ui"
+		"test:ui": "vitest --ui"
 	},
 	"devDependencies": {
 		"@vitest/coverage-v8": "4.0.13",
