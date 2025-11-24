@@ -1,60 +1,49 @@
-name: Deploy to GitHub Pages
+# Name of the workflow as it appears in the Actions tab
+name: Deploy Vite App to GitHub Pages
 
+# Triggers the workflow on push events to the 'main' branch
 on:
   push:
-    branches: [main, master]
-  workflow_dispatch:
+    branches:
+      - main
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
+# A workflow run is made up of one or more jobs
 jobs:
-  build:
+  # The name of the job
+  build-and-deploy:
+    # The runner environment the job will execute on
     runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout
+      # Step 1: Checks out your repository content
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Setup Node.js
+      # Step 2: Sets up Node.js environment
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "pnpm"
+          node-version: "20" # Use a stable Node.js version
 
+      # Step 3: Installs dependencies
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm install
 
-      - name: Build
-        run: pnpm build
-        env:
-          NODE_ENV: production
+      # Step 4: Builds the Vite application
+      - name: Build project
+        run: npm run build
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "./dist"
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
+      # Step 5: Deploys the built files to the gh-pages branch
+      # This action automatically creates the gh-pages branch if it doesn't exist
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # GitHub token is automatically available.
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # The directory containing the static files to deploy (Vite's default)
+          publish_dir: ./dist
+          # Specifies the branch to push the built files to
+          publish_branch: gh-pages
+          # Optional: adds a commit message
+          commit_message: Deploy build from GitHub Actions
