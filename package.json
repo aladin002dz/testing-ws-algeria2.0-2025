@@ -1,38 +1,11 @@
 {
-  "name": "todo",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "test": "vitest",
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage --silent",
-    "test:ui": "vitest --ui"
-  },
-  "dependencies": {
-    "next": "16.0.1",
-    "react": "19.2.0",
-    "react-dom": "19.2.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@testing-library/jest-dom": "^6.4.0",
-    "@testing-library/react": "^16.0.0",
-    "@testing-library/user-event": "^14.5.0",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^4.3.0",
-    "@vitest/coverage-v8": "^2.0.0",
-    "@vitest/ui": "2.1.9",
-    "eslint": "^9",
-    "eslint-config-next": "16.0.1",
-    "jsdom": "^24.0.0",
-    "tailwindcss": "^4",
-    "typescript": "^5",
-    "vitest": "^2.0.0"
-  }
+	"scripts": {
+		"test": "vitest",
+		"test:run": "vitest run",
+		"test:coverage": "vitest run --coverage"
+	},
+	"devDependencies": {
+		"@vitest/coverage-v8": "4.0.13",
+		"vitest": "^4.0.13"
+	}
 }
