@@ -1,49 +1,46 @@
-# Name of the workflow as it appears in the Actions tab
 name: Deploy Vite App to GitHub Pages
 
-# Triggers the workflow on push events to the 'main' branch
 on:
+  # Triggers the workflow on push events to the 'main' branch
   push:
     branches:
       - main
 
-# A workflow run is made up of one or more jobs
 jobs:
-  # The name of the job
   build-and-deploy:
-    # The runner environment the job will execute on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # 🔑 IMPORTANT: Grant explicit write permissions to the GITHUB_TOKEN
+    # This resolves the 'Write access to repository not granted' (403) error.
+    permissions:
+      contents: write # Allows the action to push to the gh-pages branch
+      pages: write # Grants permission for GitHub Pages deployment
+      id-token: write # Required for deployment
+
     steps:
-      # Step 1: Checks out your repository content
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Sets up Node.js environment
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # Use a stable Node.js version
+          node-version: "20" # Recommended Node version for modern projects
 
-      # Step 3: Installs dependencies
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Builds the Vite application
       - name: Build project
+        # This executes the 'vite build' command, creating the 'dist' folder
         run: npm run build
 
-      # Step 5: Deploys the built files to the gh-pages branch
-      # This action automatically creates the gh-pages branch if it doesn't exist
       - name: Deploy to GitHub Pages
+        # Uses the peaceiris action to push the static files to the target branch
         uses: peaceiris/actions-gh-pages@v3
         with:
-          # GitHub token is automatically available.
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # The directory containing the static files to deploy (Vite's default)
+          # The directory to deploy (output of 'vite build')
           publish_dir: ./dist
-          # Specifies the branch to push the built files to
+          # The branch GitHub Pages will read from
           publish_branch: gh-pages
-          # Optional: adds a commit message
-          commit_message: Deploy build from GitHub Actions
+          # Commit message includes the deployment emoji
+          commit_message: 🚀 Deploy build from GitHub Actions
