@@ -435,6 +435,105 @@ const context = await browser.newContext({
 })
 ```
 
+### Video Recording
+
+Playwright can automatically record videos of your test sessions for debugging and documentation.
+
+#### Browser Context-Level Recording
+
+```typescript
+import { chromium } from '@playwright/test'
+
+// Launch browser and create context with video recording
+const browser = await chromium.launch()
+const context = await browser.newContext({
+  recordVideo: {
+    dir: './videos',                    // Directory to save videos
+    size: { width: 1280, height: 720 }  // Optional: video dimensions
+  }
+})
+
+const page = await context.newPage()
+
+// Your test actions (these will be recorded)
+await page.goto('https://example.com')
+await page.getByRole('button', { name: 'Submit' }).click()
+
+// Get video path before closing
+const videoPath = await page.video().path()
+console.log('Video saved at:', videoPath)
+
+// ⚠️ IMPORTANT: Must close context to finalize video
+await context.close()
+await browser.close()
+```
+
+#### Global Configuration (playwright.config.ts)
+
+```typescript
+export default defineConfig({
+  use: {
+    // Video recording modes:
+    video: 'on',  // Options: 'off' | 'on' | 'retain-on-failure' | 'on-first-retry'
+    
+    // Alternative: Configure with more options
+    // video: {
+    //   mode: 'on',
+    //   size: { width: 1920, height: 1080 }
+    // }
+  },
+})
+```
+
+#### Video Recording Modes
+
+| Mode | Description | Use Case |
+|------|-------------|----------|
+| `'off'` | No videos recorded | Default, when videos aren't needed |
+| `'on'` | Always record videos | Development, debugging |
+| `'retain-on-failure'` | Only keep videos for failed tests | **Recommended for CI/CD** |
+| `'on-first-retry'` | Record videos on first retry only | Save disk space in CI |
+
+#### Access Video Path Programmatically
+
+```typescript
+test('example with video', async ({ page }, testInfo) => {
+  await page.goto('https://example.com')
+  
+  // Access video path after the test
+  const videoPath = await page.video().path()
+  console.log('Video will be saved at:', videoPath)
+  
+  // Video path is also available in testInfo
+  console.log('Output directory:', testInfo.outputDir)
+})
+```
+
+#### Per-Project Video Settings
+
+```typescript
+export default defineConfig({
+  projects: [
+    {
+      name: 'chromium',
+      use: { 
+        ...devices['Desktop Chrome'],
+        video: 'retain-on-failure'  // Different settings per browser
+      },
+    },
+    {
+      name: 'firefox',
+      use: { 
+        ...devices['Desktop Firefox'],
+        video: 'on'  // Always record for Firefox
+      },
+    },
+  ],
+})
+```
+
+**Video Format:** Playwright saves videos as `.webm` files. Videos are finalized only when the browser context is closed.
+
 ---
 
 ## 🤝 Playwright with Vitest
@@ -668,11 +767,8 @@ await page.pause()
 await page.screenshot({ path: 'screenshot.png' })
 await page.screenshot({ path: 'screenshot.png', fullPage: true })
 
-// Video recording (enabled in config)
-use: {
-  video: 'on',
-  // or 'retain-on-failure', 'on-first-retry'
-}
+// Video recording - see "Video Recording" section in Advanced Techniques
+// Configure in playwright.config.ts or per browser context
 
 // Trace viewer
 use: {

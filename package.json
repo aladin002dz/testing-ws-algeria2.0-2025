@@ -14,7 +14,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
-    "test:e2e:file": "playwright test e2e/navigation.spec.ts"
+    "test:e2e:file": "playwright test e2e/navigation.spec.ts",
+    "test:e2e:video": "node examples/standalone-video-demo.js"
   },
   "dependencies": {
     "next": "16.0.1",
