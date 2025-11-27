@@ -1,27 +1,18 @@
 # Software Testing Workshop - Algerie 2.0 2025
 
-An interactive presentation about software testing, built with React and Vite.
 
-**🎯 [View Live Presentation](https://aladin002dz.github.io/testing-ws-algeria2.0-2025/)**
+**🎯 [View Google Slides Presentation](https://docs.google.com/presentation/d/1OeaDwPDTKjMVl3sWy-yJ89oI53cfAgFkB5qF5IZCaiw/edit?slide=id.p#slide=id.p/)**
+**🎯 [View Live responsive Presentation](https://aladin002dz.github.io/testing-ws-algeria2.0-2025/)**
+
+**Code & Cheatsheets:**
+On the other branches here:  
+- [Unit Testing](https://github.com/aladin002dz/testing-ws-algeria2.0-2025/tree/1-vitest-unit-tests)
+- [Vitest - Testing Library - Next.js - React](https://github.com/aladin002dz/testing-ws-algeria2.0-2025/tree/2-vitest-nextjs)
+- [Playwright - E2E Testing](https://github.com/aladin002dz/testing-ws-algeria2.0-2025/tree/3-playwright-nextjs)
 
 **Author:** Mahfoudh Arous  
-**Links:** [Portfolio](https://aladin002dz.github.io/) | [LinkedIn](https://www.linkedin.com/in/mahfoudh-arous/)
+**Links:** [Website](https://aladin002dz.github.io/) | [LinkedIn](https://www.linkedin.com/in/mahfoudh-arous/)
 
-## 🚀 Getting Started
-
-```bash
-# Install dependencies
-pnpm install
-
-# Run development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-```
 
 ## 📊 Presentation Content
 
@@ -94,7 +85,7 @@ Next.js Multipage
 
 **Testing in Git Hooks**
 
-- Husky pre commit: .husky/pre-commit
+- Husky pre commit: .husky/pre-commit (not recommended)
 - Husky pre push hook: .husky/pre-push
 
 **Testing in CI/CD**
@@ -102,42 +93,6 @@ Next.js Multipage
 - GitHub Actions on PR (Pull Request)
 
 ### Slide 10: Thank You 👋
-
-AI for Modern Web Applications Development: React and Next.js
-
-## 🎮 Navigation
-
-- **Arrow Keys:** Use ← → to navigate between slides
-- **Click Navigation:** Use the chevron buttons at the bottom
-- **Slide Indicators:** Click on any dot indicator to jump to a specific slide
-
-## 🛠️ Tech Stack
-
-- **React** - UI library
-- **Vite** - Build tool and dev server
-- **Tailwind CSS** - Styling
-- **Lucide React** - Icons
-
-## 📁 Project Structure
-
-```
-src/
-├── assets/
-│   ├── algeria20_logo-blanc.webp
-│   ├── mahfoudh-arous.jpg
-│   └── react.svg
-├── SoftwareTestingPresentation.jsx  # Main presentation component
-├── main.jsx                          # App entry point
-└── index.css                         # Global styles
-```
-
-## 🎨 Features
-
-- **Responsive Design:** Works on desktop, tablet, and mobile devices
-- **Keyboard Navigation:** Full keyboard support for accessibility
-- **Smooth Transitions:** Elegant slide transitions
-- **External Links:** Direct links to resources and documentation
-- **Visual Indicators:** Clear progress tracking with slide indicators
 
 ## 📝 License
 
